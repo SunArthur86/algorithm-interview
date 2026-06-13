@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algorithm Hub — LeetCode Hot 100 + 算法可视化</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧮</text></svg>">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/algorithm.css">
+<link rel="stylesheet" href="css/solutions-v2.css">
+<link rel="stylesheet" href="css/interactive.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-left">
+    <div class="nav-logo">🧮 Algorithm<span>Hub</span></div>
+  </div>
+  <div class="nav-right">
+    <div class="view-switch">
+      <button class="view-switch-btn active" data-view="problems">📋 题库</button>
+      <button class="view-switch-btn" data-view="visualizer">🎬 可视化</button>
+    </div>
+    <button class="theme-btn" id="theme-toggle" title="切换深色模式 (T)">🌙</button>
+  </div>
+</nav>
+
+<!-- View: Problems -->
+<div id="view-problems">
+  <!-- Hero -->
+  <div class="hero">
+    <h1>LeetCode Hot 100</h1>
+    <p>100 道高频面试题 · 17 大分类 · 完成进度追踪 · Java 详细题解（多种解法 + 执行步骤 + 常见陷阱）</p>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-section">
+    <div class="progress-card">
+      <div class="progress-card-inner">
+        <div class="progress-ring-wrap">
+          <svg class="progress-ring" width="120" height="120">
+            <circle class="progress-ring-bg" cx="60" cy="60" r="52" stroke-width="8" fill="none" />
+            <circle class="progress-ring-fill" id="progress-ring-fill" cx="60" cy="60" r="52" stroke-width="8" fill="none"
+              stroke-dasharray="326.7" stroke-dashoffset="326.7" transform="rotate(-90 60 60)" />
+          </svg>
+          <div class="progress-ring-text">
+            <span class="progress-pct" id="stat-pct">0%</span>
+          </div>
+        </div>
+        <div class="progress-info">
+          <div class="progress-row">
+            <span class="progress-label">完成进度</span>
+            <span class="stat-big" id="stat-total">0</span><span class="stat-total-label">题</span>
+          </div>
+          <div class="stats-row">
+            <div class="stat-mini stat-easy"><div class="stat-mini-val" id="stat-easy">0/0</div><div class="stat-mini-label">简单</div></div>
+            <div class="stat-mini stat-medium"><div class="stat-mini-val" id="stat-medium">0/0</div><div class="stat-mini-label">中等</div></div>
+            <div class="stat-mini stat-hard"><div class="stat-mini-val" id="stat-hard">0/0</div><div class="stat-mini-label">困难</div></div>
+            <div class="stat-mini stat-streak"><div class="stat-mini-val" id="stat-streak">0</div><div class="stat-mini-label">🔥 连续天数</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="dashboard">
+    <div class="dashboard-card">
+      <h3 class="dashboard-title">📊 分类掌握度</h3>
+      <div class="cat-progress" id="cat-progress"></div>
+    </div>
+    <div class="dashboard-card">
+      <h3 class="dashboard-title">🎯 今日推荐</h3>
+      <div class="daily-rec" id="daily-rec"></div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filter-bar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-box" id="search-input" type="text" placeholder="搜索题号、标题、标签… (按 / 快速聚焦)">
+    </div>
+    <!-- Filter toggles + Sort -->
+    <div class="filter-row">
+      <button class="filter-toggle" id="toggle-completed" onclick="App.toggleCompletedOnly()" title="只看已完成">✅ 已完成</button>
+      <button class="filter-toggle" id="toggle-starred" onclick="App.toggleStarredOnly()" title="只看收藏">⭐ 收藏</button>
+      <div class="sort-tabs" id="sort-tabs"></div>
+    </div>
+    <div class="cat-tabs" id="category-tabs"></div>
+    <div class="diff-tabs" id="diff-tabs"></div>
+  </div>
+
+  <!-- Problem List -->
+  <div class="problem-list-container">
+    <div id="problem-list"></div>
+  </div>
+</div>
+
+<!-- View: Visualizer -->
+<div id="view-visualizer">
+  <div class="hero">
+    <h1>算法可视化</h1>
+    <p>18 种算法动画 · 实时演示 · DP表格 · 链表操作 · 树遍历 · 双指针 · 滑动窗口</p>
+  </div>
+
+  <div style="max-width:1000px;margin:0 auto;padding:0 24px 80px;">
+    <div class="algo-layout">
+      <!-- Algorithm Sidebar -->
+      <div class="algo-sidebar" id="algo-list">
+        <div class="algo-cat-title">排序算法</div>
+        <button class="algo-btn active" data-algo="bubble">🫧 冒泡排序</button>
+        <button class="algo-btn" data-algo="selection">👆 选择排序</button>
+        <button class="algo-btn" data-algo="insertion">📥 插入排序</button>
+        <button class="algo-btn" data-algo="shell">🔩 希尔排序</button>
+        <button class="algo-btn" data-algo="quick">⚡ 快速排序</button>
+        <button class="algo-btn" data-algo="merge">🔗 归并排序</button>
+        <button class="algo-btn" data-algo="heap">🏔️ 堆排序</button>
+        <button class="algo-btn" data-algo="counting">🔢 计数排序</button>
+        <div class="algo-cat-title">搜索算法</div>
+        <button class="algo-btn" data-algo="binary">🔍 二分查找</button>
+        <div class="algo-cat-title">图算法</div>
+        <button class="algo-btn" data-algo="bfs">🌊 BFS 广搜</button>
+        <button class="algo-btn" data-algo="dfs">🏔️ DFS 深搜</button>
+      </div>
+
+      <!-- Algorithm Canvas -->
+      <div class="algo-main">
+        <div class="algo-controls">
+          <button class="ctrl-btn primary" id="btn-algo-play">▶ 开始</button>
+          <button class="ctrl-btn" id="btn-algo-step" title="单步执行">⏭ 单步</button>
+          <button class="ctrl-btn" id="btn-algo-pause">⏸ 暂停</button>
+          <button class="ctrl-btn" id="btn-algo-reset">↻ 重置</button>
+          <div class="ctrl-slider">
+            <label>速度</label>
+            <input type="range" id="algo-speed" min="1" max="10" value="5">
+            <span id="algo-speed-val">5</span>
+          </div>
+          <div class="ctrl-slider">
+            <label>数量</label>
+            <input type="range" id="algo-size" min="5" max="50" value="30">
+          </div>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="algo-canvas"></canvas>
+        </div>
+
+        <!-- Color Legend -->
+        <div class="algo-legend">
+          <div class="legend-item"><span class="legend-dot legend-normal"></span>未访问</div>
+          <div class="legend-item"><span class="legend-dot legend-compare"></span>比较中</div>
+          <div class="legend-item"><span class="legend-dot legend-swap"></span>交换/写入</div>
+          <div class="legend-item"><span class="legend-dot legend-pivot"></span>基准/活跃</div>
+          <div class="legend-item"><span class="legend-dot legend-sorted"></span>已排序</div>
+        </div>
+
+        <div class="algo-info-bar">
+          <div class="algo-info-item">⏱ <span id="algo-time">O(n²)</span></div>
+          <div class="algo-info-item">📦 <span id="algo-space">O(1)</span></div>
+          <div class="algo-info-item">🔄 比较 <span id="algo-compares">0</span></div>
+          <div class="algo-info-item">🔁 交换 <span id="algo-swaps">0</span></div>
+          <div class="algo-status" id="algo-status"></div>
+        </div>
+
+        <div class="algo-description" id="algo-description"></div>
+
+        <!-- Pseudocode Panel -->
+        <div class="algo-pseudo-panel" id="algo-pseudo-panel">
+          <div class="pseudo-header">📝 伪代码 <span class="pseudo-hint">当前执行步骤高亮显示</span></div>
+          <pre class="pseudo-code" id="algo-pseudo"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Problem Detail Modal -->
+<div id="problem-modal" class="modal-overlay">
+  <div class="modal-content" id="modal-content"></div>
+</div>
+
+<!-- Back to Top -->
+<button id="back-to-top" title="回到顶部">↑</button>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Scripts -->
+<script src="js/safe-ls.js"></script>
+<script src="js/problems-data.js"></script>
+<script src="js/solutions-v2.js"></script>
+<script src="js/sol-v2-01.js"></script>
+<script src="js/sol-v2-02.js"></script>
+<script src="js/sol-v2-03a.js"></script>
+<script src="js/sol-v2-03b.js"></script>
+<script src="js/sol-v2-04a.js"></script>
+<script src="js/sol-v2-04b.js"></script>
+<script src="js/sol-v2-05.js"></script>
+<script src="js/sol-v2-06a.js"></script>
+<script src="js/sol-v2-06b.js"></script>
+<script src="js/sol-v2-07a.js"></script>
+<script src="js/sol-v2-07b.js"></script>
+<script src="js/sol-v2-07c.js"></script>
+<script src="js/app.js"></script>
+<script src="js/algorithm-visualizer.js"></script>
+<script src="js/visualizer-extended.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof Algorithm !== 'undefined' && Algorithm.init) {
+    Algorithm.init();
+  }
+});
+</script>
+</body>
+</html>

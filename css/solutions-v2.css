@@ -1,0 +1,158 @@
+
+/* ===== V2 Solution Styles ===== */
+
+/* Approach Tabs */
+.approach-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0 0;
+  flex-wrap: wrap;
+  border-bottom: 2px solid rgba(0,0,0,0.06);
+  padding-bottom: 0;
+}
+.approach-tab {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-tertiary, #999);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+  border-radius: 6px 6px 0 0;
+}
+.approach-tab:hover {
+  color: var(--text-secondary, #666);
+  background: rgba(0,0,0,0.03);
+}
+.approach-tab.active {
+  color: var(--accent-color, #0071e3);
+  border-bottom-color: var(--accent-color, #0071e3);
+}
+.approach-panel {
+  animation: fadeIn 0.3s ease;
+}
+
+/* Approach name + description */
+.sol-approach-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary, #1d1d1f);
+  margin-bottom: 8px;
+}
+.sol-approach-desc {
+  font-size: 14px;
+  color: var(--text-secondary, #6e6e73);
+  line-height: 1.7;
+}
+
+/* Thinking section */
+.sol-thinking {
+  font-size: 14px;
+  color: var(--text-secondary, #6e6e73);
+  line-height: 1.8;
+  background: rgba(0,113,227,0.04);
+  border-radius: 12px;
+  padding: 16px;
+  border-left: 3px solid var(--accent-color, #0071e3);
+}
+
+/* Steps (ordered list) */
+.sol-steps {
+  list-style: none;
+  counter-reset: step;
+  padding: 0;
+}
+.sol-steps li {
+  counter-increment: step;
+  font-size: 14px;
+  color: var(--text-secondary, #6e6e73);
+  line-height: 1.7;
+  padding: 6px 0 6px 36px;
+  position: relative;
+}
+.sol-steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent-color, #0071e3);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Pitfalls */
+.sol-pitfalls-section {
+  background: rgba(255,159,10,0.05);
+  border-radius: 12px;
+  padding: 16px;
+  border-left: 3px solid #ff9f0a;
+}
+.sol-pitfalls-section .sol-section-title {
+  color: #ff9f0a;
+}
+.sol-pitfalls {
+  list-style: none;
+  padding: 0;
+}
+.sol-pitfalls li {
+  font-size: 13px;
+  color: var(--text-secondary, #6e6e73);
+  line-height: 1.7;
+  padding: 4px 0 4px 24px;
+  position: relative;
+}
+.sol-pitfalls li::before {
+  content: "⚠";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  color: #ff9f0a;
+  font-size: 14px;
+}
+
+/* Key points - enhanced */
+.sol-keypoints li {
+  font-size: 13px;
+  color: var(--text-secondary, #6e6e73);
+  line-height: 1.7;
+  padding: 4px 0 4px 20px;
+  position: relative;
+  list-style: none;
+}
+.sol-keypoints li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--accent-color, #0071e3);
+  font-weight: 700;
+}
+
+/* Dark mode approach tabs */
+[data-theme="dark"] .approach-tabs {
+  border-bottom-color: rgba(255,255,255,0.08);
+}
+[data-theme="dark"] .approach-tab:hover {
+  background: rgba(255,255,255,0.05);
+}
+[data-theme="dark"] .sol-thinking {
+  background: rgba(0,113,227,0.08);
+}
+[data-theme="dark"] .sol-pitfalls-section {
+  background: rgba(255,159,10,0.08);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
