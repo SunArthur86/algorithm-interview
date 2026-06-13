@@ -3,6 +3,7 @@ var Algorithm = (function() {
   var canvas, ctx;
   var arr = [];
   var running = false;
+  var _initialized = false;
   var paused = false;
   var currentAlgo = 'bubble';
   var speed = 5;
@@ -881,6 +882,8 @@ var Algorithm = (function() {
   }
 
   function init() {
+    if (_initialized) return; // Guard against multiple init calls
+    _initialized = true;
     canvas = document.getElementById('algo-canvas');
     if (!canvas) return;
     ctx = canvas.getContext('2d');

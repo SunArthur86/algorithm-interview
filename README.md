@@ -10,6 +10,7 @@
 - **详细描述**：每题包含解题思路、方法详解、执行步骤、关键点
 - **常见陷阱**：每题列出容易犯的错误和注意事项
 - **复杂度分析**：时间和空间复杂度
+- **语法高亮**：Java 代码自动高亮（关键字/字符串/注释/注解）
 
 ### 🎬 18种算法动画
 - **排序算法**（8种）：冒泡、选择、插入、希尔、快速、归并、堆、计数
@@ -30,24 +31,25 @@
 - 纯前端（HTML + CSS + JavaScript）
 - Canvas 动画渲染
 - localStorage 进度持久化
+- `defer` 异步脚本加载，零阻塞渲染
 - 响应式设计，支持深色模式
 
 ## 📂 项目结构
 ```
 ├── index.html              # 主页面
 ├── css/
-│   ├── main.css            # 主样式
+│   ├── main.css            # 主样式 + Java语法高亮
 │   ├── algorithm.css       # 可视化样式
 │   ├── solutions-v2.css    # 题解样式
 │   └── interactive.css     # 互动练习样式
 ├── js/
+│   ├── safe-ls.js          # localStorage 安全封装
 │   ├── app.js              # 主逻辑 + 题解渲染
 │   ├── problems-data.js    # 100题数据
 │   ├── solutions-v2.js     # 题解框架
 │   ├── sol-v2-01~07c.js    # 12批次Java题解
 │   ├── algorithm-visualizer.js  # 11种基础动画
-│   ├── visualizer-extended.js   # 7种扩展动画
-│   └── safe-ls.js          # localStorage封装
+│   └── visualizer-extended.js   # 7种扩展动画
 └── data/
     └── hot100-raw.json     # 原始数据
 ```

@@ -1,13 +1,5 @@
 /* ===== Algorithm Hub — 主逻辑 (v2.0 增强版) ===== */
-var safeLS = (function() {
-  var ok = true;
-  try { localStorage.setItem('_t', '1'); localStorage.removeItem('_t'); } catch(e) { ok = false; }
-  return {
-    getItem: function(k) { return ok ? localStorage.getItem(k) : null; },
-    setItem: function(k, v) { if (ok) try { localStorage.setItem(k, v); } catch(e) {} },
-    removeItem: function(k) { if (ok) try { localStorage.removeItem(k); } catch(e) {} }
-  };
-})();
+/* safeLS 由 safe-ls.js 统一定义，此处直接引用 */
 
 var App = (function() {
   var state = {
@@ -166,8 +158,6 @@ var App = (function() {
     var pct = Math.round(done / total * 100);
     $('stat-total').textContent = total;
     $('stat-pct').textContent = pct + '%';
-    var pf = $('progress-fill');
-    if (pf) pf.style.width = pct + '%';
 
     // Progress ring
     var ring = $('progress-ring-fill');
@@ -495,7 +485,7 @@ var App = (function() {
           if (a.code) {
             html += '<div class="sol-section">';
             html += '  <div class="sol-section-title">💻 Java 代码 <button class="copy-code-btn" onclick="App.copyCode(' + idx + ')">📋 复制</button></div>';
-            html += '  <pre class="sol-code active" id="sol-code-' + idx + '"><code>' + esc(a.code) + '</code></pre>';
+            html += '  <pre class="sol-code active" id="sol-code-' + idx + '"><code>' + highlightJava(a.code) + '</code></pre>';
             html += '</div>';
           }
           // Key points
@@ -702,6 +692,40 @@ var App = (function() {
     var d = document.createElement('div');
     d.textContent = s;
     return d.innerHTML;
+  }
+
+  // === Java Syntax Highlighting (lightweight) ===
+  var JAVA_KEYWORDS = ['abstract','assert','boolean','break','byte','case','catch','char','class','const','continue','default','do','double','else','enum','extends','final','finally','float','for','goto','if','implements','import','instanceof','int','interface','long','native','new','package','private','protected','public','return','short','static','strictfp','super','switch','synchronized','this','throw','throws','transient','try','void','volatile','while','var','String','List','Map','Set','ArrayList','HashMap','HashSet','LinkedList','Queue','Deque','ArrayDeque','PriorityQueue','Stack','TreeNode','ListNode','Integer','Character','Boolean','Long','Double','Object'];
+  var JAVA_KW_RE = new RegExp('\\b(' + JAVA_KEYWORDS.join('|') + ')\\b', 'g');
+
+  function highlightJava(code) {
+    // First escape HTML
+    var html = esc(code);
+    // Protect strings and comments with placeholders
+    var placeholders = [];
+    // Comments: // and /* */
+    html = html.replace(/(\/\*[\s\S]*?\*\/|\/\/[^\n]*)/g, function(m) {
+      var i = placeholders.length;
+      placeholders.push('<span class="java-comment">' + m + '</span>');
+      return '\x00C' + i + '\x00';
+    });
+    // Strings
+    html = html.replace(/("(?:[^"\\]|\\.)*")/g, function(m) {
+      var i = placeholders.length;
+      placeholders.push('<span class="java-string">' + m + '</span>');
+      return '\x00S' + i + '\x00';
+    });
+    // Annotations: @Override, @SuppressWarnings
+    html = html.replace(/(@[A-Za-z_][A-Za-z0-9_]*)/g, '<span class="java-annotation">$1</span>');
+    // Keywords
+    html = html.replace(JAVA_KW_RE, '<span class="java-keyword">$1</span>');
+    // Numbers
+    html = html.replace(/\b(\d+\.?\d*[fFlLdD]?)\b/g, '<span class="java-number">$1</span>');
+    // Restore placeholders
+    html = html.replace(/\x00([CS])(\d+)\x00/g, function(m, type, idx) {
+      return placeholders[parseInt(idx)];
+    });
+    return html;
   }
 
   // === Toggle Complete ===

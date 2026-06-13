@@ -488,6 +488,23 @@ mark { background: var(--yellow); color: var(--text); padding: 0 2px; border-rad
   padding: 16px 24px;
   border-bottom: 1px solid var(--border-2);
 }
+
+/* === Java Syntax Highlighting === */
+.sol-code .java-keyword { color: #c678dd; font-weight: 600; }
+.sol-code .java-string { color: #98c379; }
+.sol-code .java-comment { color: #7f848e; font-style: italic; }
+.sol-code .java-number { color: #d19a66; }
+.sol-code .java-annotation { color: #e5c07b; font-weight: 500; }
+[data-theme="dark"] .sol-code .java-keyword { color: #c678dd; }
+[data-theme="dark"] .sol-code .java-string { color: #98c379; }
+[data-theme="dark"] .sol-code .java-comment { color: #7f848e; }
+[data-theme="dark"] .sol-code .java-number { color: #d19a66; }
+[data-theme="dark"] .sol-code .java-annotation { color: #e5c07b; }
+[data-theme="light"] .sol-code .java-keyword { color: #a626a4; }
+[data-theme="light"] .sol-code .java-string { color: #50a14f; }
+[data-theme="light"] .sol-code .java-comment { color: #a0a1a7; }
+[data-theme="light"] .sol-code .java-number { color: #986801; }
+[data-theme="light"] .sol-code .java-annotation { color: #c18401; }
 .sol-section-title {
   font-size: 14px;
   font-weight: 700;
