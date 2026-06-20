@@ -5,10 +5,18 @@ const BASE = process.env.NODE_ENV === 'production' ? '/algorithm-interview' : ''
 
 export const metadata: Metadata = {
   title: '算法面试题库',
-  description: 'LeetCode 热题 100 题解、逐题动画、知识专栏与智能复习',
+  description: 'LeetCode 热题 100 完整 Java 题解、逐题动画、知识专栏与智能间隔复习。',
+  keywords: ['LeetCode', '热题100', '算法面试', 'Java题解', '数据结构', '动态规划', '面试刷题'],
   manifest: `${BASE}/manifest.json`,
   applicationName: '算法面试',
   appleWebApp: { capable: true, title: '算法面试', statusBarStyle: 'default' },
+  openGraph: {
+    title: '算法面试题库',
+    description: 'LeetCode 热题 100 完整 Java 题解、逐题动画、知识专栏与智能复习',
+    type: 'website',
+    locale: 'zh_CN',
+    siteName: '算法面试题库',
+  },
 };
 
 export const viewport: Viewport = {

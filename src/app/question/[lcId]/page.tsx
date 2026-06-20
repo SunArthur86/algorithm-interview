@@ -17,9 +17,22 @@ export async function generateMetadata({
   const { lcId } = await params;
   const q = getQuestionByLcId(lcId);
   if (!q) return { title: '算法面试题库' };
+  const desc = q.feynman?.essence || q.answer.slice(0, 120).replace(/[#*>`]/g, '');
   return {
     title: `${q.lcId}. ${q.title} - 算法面试`,
-    description: q.feynman?.essence || q.answer.slice(0, 120).replace(/[#*>`]/g, ''),
+    description: desc,
+    keywords: [q.title, `LeetCode ${q.lcId}`, q.difficulty, ...q.tags],
+    openGraph: {
+      title: `${q.lcId}. ${q.title}`,
+      description: desc,
+      type: 'article',
+      locale: 'zh_CN',
+    },
+    twitter: {
+      card: 'summary',
+      title: `${q.lcId}. ${q.title}`,
+      description: desc,
+    },
   };
 }
 

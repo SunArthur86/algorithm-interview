@@ -26,6 +26,7 @@ export default function ReviewDashboard({ questions, onClose }: Props) {
   const setReviewAlgorithm = useStore((s) => s.setReviewAlgorithm);
   const dailyReviewLimit = useStore((s) => s.dailyReviewLimit);
   const setDailyReviewLimit = useStore((s) => s.setDailyReviewLimit);
+  const dailyLog = useStore((s) => s.dailyLog);
   const resetReview = useStore((s) => s.resetReview);
   const autoEnroll = useStore((s) => s.autoEnroll);
   const toggleAutoEnroll = useStore((s) => s.toggleAutoEnroll);
@@ -65,6 +66,24 @@ export default function ReviewDashboard({ questions, onClose }: Props) {
     [reviewData]
   );
   const totalEnrolled = Object.keys(reviewData).length;
+
+  // 近 7 天学习统计
+  const weekStats = useMemo(() => {
+    const days: { date: string; label: string; count: number }[] = [];
+    const today = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const iso = d.toISOString().split('T')[0];
+      days.push({
+        date: iso,
+        label: ['日', '一', '二', '三', '四', '五', '六'][d.getDay()],
+        count: dailyLog[iso]?.studied || 0,
+      });
+    }
+    return days;
+  }, [dailyLog]);
+  const weekMax = Math.max(1, ...weekStats.map((d) => d.count));
 
   const currentKey = queue[cursor];
   const currentQ = currentKey ? byKey.get(currentKey) : null;
@@ -106,6 +125,26 @@ export default function ReviewDashboard({ questions, onClose }: Props) {
             {ALGO_LABELS[reviewAlgorithm]} · 已加入 {totalEnrolled} · 已掌握 {masteredCount}
           </span>
           <button onClick={() => setSettingsOpen((v) => !v)} style={chipBtn}>⚙️ 设置</button>
+        </div>
+
+        {/* 近 7 天学习柱状图 */}
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end', height: '70px', marginBottom: '12px', padding: '0 4px' }}>
+          {weekStats.map((d) => (
+            <div key={d.date} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+              <div
+                title={`${d.date}: ${d.count} 题`}
+                style={{
+                  width: '100%',
+                  maxWidth: 28,
+                  height: Math.max(3, (d.count / weekMax) * 48),
+                  background: d.count > 0 ? 'var(--primary)' : 'var(--border)',
+                  borderRadius: '4px 4px 0 0',
+                  transition: 'height 0.3s',
+                }}
+              />
+              <span style={{ fontSize: '10px', color: 'var(--text-tertiary)' }}>{d.label}</span>
+            </div>
+          ))}
         </div>
 
         {settingsOpen && (

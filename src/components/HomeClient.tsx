@@ -112,8 +112,8 @@ export default function HomeClient({ questions }: { questions: Question[] }) {
         <div className="top-nav" style={{ marginLeft: 'auto', display: 'flex', gap: '8px', alignItems: 'center' }}>
           <Link href="/study-plan/" style={topLink}>📋 热题100</Link>
           <Link href="/columns/" style={topLink}>📚 专栏</Link>
-          <button onClick={() => setReviewOpen(true)} style={topLink}>🔁 复习</button>
-          <button onClick={toggleTheme} style={iconBtn}>
+          <button onClick={() => setReviewOpen(true)} style={topLink} aria-label="打开复习面板">🔁 复习</button>
+          <button onClick={toggleTheme} style={iconBtn} aria-label={theme === 'light' ? '切换到深色模式' : '切换到浅色模式'}>
             {theme === 'light' ? '🌙' : '☀️'}
           </button>
         </div>

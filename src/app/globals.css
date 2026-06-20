@@ -88,6 +88,12 @@ body {
   font-size: 15px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* 所有用 CSS 变量的元素平滑过渡深色切换 */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 a {
@@ -189,6 +195,28 @@ button {
 ::-webkit-scrollbar-thumb {
   background: var(--border-strong);
   border-radius: 4px;
+}
+
+/* 无障碍：键盘焦点可见 */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* 尊重 prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
 }
 
 /* 移动端响应式 */

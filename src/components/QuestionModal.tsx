@@ -61,6 +61,7 @@ export default function QuestionModal({ question, list, index, onClose, onNaviga
       >
         <button
           onClick={onClose}
+          aria-label="关闭"
           style={{
             position: 'absolute',
             top: '14px',
