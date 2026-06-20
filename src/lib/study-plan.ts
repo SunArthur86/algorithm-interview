@@ -19,6 +19,7 @@ let _cache: StudyPlan | null = null;
 export function getTop100Plan(): StudyPlan {
   if (_cache) return _cache;
   const raw = fs.readFileSync(PLAN_FILE, 'utf-8');
-  _cache = JSON.parse(raw);
-  return _cache;
+  const parsed: StudyPlan = JSON.parse(raw);
+  _cache = parsed;
+  return parsed;
 }
