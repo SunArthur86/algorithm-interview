@@ -1,8 +1,8 @@
-# 🧮 Algorithm Hub
+# 🧮 Algorithm Interview
 
 > LeetCode Hot 100 **完整 Java 题解** + **18 种算法动画可视化** + **100 题逐题动画演示**
 
-🔗 **在线访问**: [https://sunarthur86.github.io/algorithm-hub/](https://sunarthur86.github.io/algorithm-hub/)
+🔗 **在线访问**: [https://sunarthur86.github.io/algorithm-interview/](https://sunarthur86.github.io/algorithm-interview/)
 
 ## ✨ 特性
 

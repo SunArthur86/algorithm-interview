@@ -1,6 +1,6 @@
 {
-  "name": "Algorithm Hub — LeetCode Hot 100 + 可视化",
-  "short_name": "Algorithm Hub",
+  "name": "Algorithm Interview — LeetCode Hot 100 + 可视化",
+  "short_name": "Algorithm Interview",
   "description": "100 道高频算法题（Java 多解法）+ 18 种算法动画 + 每题独立可视化",
   "start_url": "./",
   "display": "standalone",

@@ -1,4 +1,4 @@
-/* Algorithm Hub Service Worker v1 */
+/* Algorithm Interview Service Worker v1 */
 var CACHE_NAME = 'algo-hub-v1';
 var ASSETS = [
   './',

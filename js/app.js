@@ -1,4 +1,4 @@
-/* ===== Algorithm Hub — 主逻辑 (v2.0 增强版) ===== */
+/* ===== Algorithm Interview — 主逻辑 (v2.0 增强版) ===== */
 /* safeLS 由 safe-ls.js 统一定义，此处直接引用 */
 
 var App = (function() {
