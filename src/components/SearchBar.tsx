@@ -5,17 +5,19 @@ import { useStore } from '@/lib/store';
 interface Props {
   value: string;
   onChange: (v: string) => void;
+  inputId?: string;
 }
 
-export default function SearchBar({ value, onChange }: Props) {
+export default function SearchBar({ value, onChange, inputId }: Props) {
   const searchHistory = useStore((s) => s.searchHistory);
   const addSearchHistory = useStore((s) => s.addSearchHistory);
 
   return (
     <div style={{ marginBottom: '12px' }}>
       <input
+        id={inputId}
         type="text"
-        placeholder="🔍 搜索题号、标题或标签…"
+        placeholder="🔍 搜索题号、标题或标签…（按 / 聚焦）"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onBlur={() => value.trim() && addSearchHistory(value)}

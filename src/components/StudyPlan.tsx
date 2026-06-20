@@ -8,6 +8,55 @@ import { useStore } from '@/lib/store';
 import { APP_CONFIG } from '@/lib/config';
 import ProgressRing from './ProgressRing';
 
+function exportProgress() {
+  const state = useStore.getState();
+  const data = {
+    planProgress: state.planProgress,
+    favorites: state.favorites,
+    ratings: state.ratings,
+    reviewData: state.reviewData,
+    exportedAt: new Date().toISOString(),
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `algo-progress-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importProgress(e: React.ChangeEvent<HTMLInputElement>) {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result as string);
+      useStore.setState({
+        planProgress: data.planProgress || {},
+        favorites: data.favorites || [],
+        ratings: data.ratings || {},
+        reviewData: data.reviewData || {},
+      });
+      alert('✅ 进度导入成功');
+    } catch {
+      alert('❌ 文件格式错误');
+    }
+  };
+  reader.readAsText(file);
+}
+
+const toolBtn: React.CSSProperties = {
+  padding: '5px 10px',
+  fontSize: '12px',
+  borderRadius: 'var(--radius-sm)',
+  border: '1px solid var(--border)',
+  background: 'var(--card)',
+  color: 'var(--text-secondary)',
+  cursor: 'pointer',
+};
+
 const DIFF_COLOR: Record<string, string> = {
   Easy: 'var(--diff-easy)',
   Medium: 'var(--diff-medium)',
@@ -73,6 +122,13 @@ export default function StudyPlan({ plan, questions }: Props) {
             <span>⏳ 剩余 <strong>{remaining}</strong> 题</span>
             <span>📅 预计 <strong>{remaining === 0 ? '已完成 🎉' : `${etaDate}（${etaDays}天）`}</strong></span>
           </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <button onClick={exportProgress} style={toolBtn}>⬇️ 导出进度</button>
+          <label style={{ ...toolBtn, textAlign: 'center', cursor: 'pointer' }}>
+            ⬆️ 导入
+            <input type="file" accept=".json" onChange={importProgress} style={{ display: 'none' }} />
+          </label>
         </div>
       </section>
 

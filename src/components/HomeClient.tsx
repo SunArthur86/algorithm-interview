@@ -32,6 +32,7 @@ export default function HomeClient({ questions }: { questions: Question[] }) {
   const [sort, setSort] = useState<SortOrder>('plan');
   const [onlyFav, setOnlyFav] = useState(false);
   const [search, setSearch] = useState('');
+  const [activeTag, setActiveTag] = useState<string | null>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [reviewOpen, setReviewOpen] = useState(false);
 
@@ -42,12 +43,32 @@ export default function HomeClient({ questions }: { questions: Question[] }) {
     return c;
   }, [questions]);
 
+  // 所有标签（按出现频次排序，取前 24）
+  const allTags = useMemo(() => {
+    const m: Record<string, number> = {};
+    for (const q of questions) for (const t of q.tags) m[t] = (m[t] || 0) + 1;
+    return Object.entries(m).sort((a, b) => b[1] - a[1]).slice(0, 24).map((x) => x[0]);
+  }, [questions]);
+
+  // `/` 聚焦搜索框
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === '/' && !['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) {
+        e.preventDefault();
+        document.getElementById('home-search')?.focus();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
   // 过滤 + 排序
   const filtered = useMemo(() => {
     let list = questions;
     if (cat !== 'all') list = list.filter((q) => q.category === cat);
     if (diff !== 'all') list = list.filter((q) => q.difficulty === diff);
     if (onlyFav) list = list.filter((q) => favorites.includes(String(q.lcId)));
+    if (activeTag) list = list.filter((q) => q.tags.includes(activeTag));
     if (search.trim()) {
       const s = search.trim().toLowerCase();
       list = list.filter(
@@ -65,7 +86,7 @@ export default function HomeClient({ questions }: { questions: Question[] }) {
     else if (sort === 'hard-first')
       sorted.sort((a, b) => diffRank(b.difficulty) - diffRank(a.difficulty) || a.lcId - b.lcId);
     return sorted;
-  }, [questions, cat, diff, onlyFav, search, sort, favorites]);
+  }, [questions, cat, diff, onlyFav, search, sort, favorites, activeTag]);
 
   const diffCounts = useMemo(() => {
     const c = { Easy: 0, Medium: 0, Hard: 0 };
@@ -104,7 +125,7 @@ export default function HomeClient({ questions }: { questions: Question[] }) {
         <DifficultyBars counts={diffCounts} />
       </section>
 
-      <SearchBar value={search} onChange={setSearch} />
+      <SearchBar value={search} onChange={setSearch} inputId="home-search" />
       <FilterBar
         difficulty={diff}
         onDifficulty={setDiff}
@@ -114,6 +135,34 @@ export default function HomeClient({ questions }: { questions: Question[] }) {
         onToggleFav={() => setOnlyFav((v) => !v)}
       />
       <CategoryTabs active={cat} counts={counts} onSelect={setCat} />
+
+      {/* 标签云 */}
+      {allTags.length > 0 && (
+        <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', marginBottom: '14px' }}>
+          {allTags.map((t) => (
+            <button
+              key={t}
+              onClick={() => setActiveTag(activeTag === t ? null : t)}
+              style={{
+                fontSize: '11px',
+                padding: '2px 9px',
+                borderRadius: '999px',
+                border: '1px solid ' + (activeTag === t ? 'var(--primary)' : 'var(--border)'),
+                background: activeTag === t ? 'var(--primary-soft)' : 'var(--card)',
+                color: activeTag === t ? 'var(--primary)' : 'var(--text-secondary)',
+                cursor: 'pointer',
+              }}
+            >
+              {t}
+            </button>
+          ))}
+          {activeTag && (
+            <button onClick={() => setActiveTag(null)} style={{ fontSize: '11px', color: 'var(--text-tertiary)', background: 'none', border: 'none', cursor: 'pointer' }}>
+              ✕ 清除标签
+            </button>
+          )}
+        </div>
+      )}
 
       {/* 题目网格 */}
       <div
